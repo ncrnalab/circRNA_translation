@@ -13,7 +13,7 @@ riboseq_data <- data.frame (fread ("data/RiboSeq_featureCounts.txt"))
 
 
 # add circRNA data
-circ_data <- data.frame (fread ('zcat data/hsa_circ.txt.gz'))
+circ_data <- data.frame (fread ('zcat data/RiboSeq_circ.txt.gz'))
 
 circ_data <-
    circ_data %>% filter (real_rel_pos > -8 & real_rel_pos < 6) %>% # only bsj-spanning reads
@@ -98,9 +98,6 @@ bind_data <- bind_data %>%
    mutate (qq = findInterval (-log(p), quantile(-log(p), probs=0:4/5)))
    
 
-
-colnames (bind_data)
-
 use_features <- c("CDS", "circRNA", "sno/miRNA")
 
 gg[["RPMMvsQuality"]] <-
@@ -116,25 +113,15 @@ gg[["RPMMvsQuality"]] <-
       #scale_fill_discrete(discrete = TRUE)  +
       ggtheme
 
-gg[["RPMMvsQuality_legend"]] <-
-   ggplot (bind_data %>% filter (myrpm > 0, feature %in% use_features), aes (x=qq, y=myrpm, color=feature)) +
-      geom_line (size=1.2) +
-      scale_y_log10(labels = dropZero) +
-      scale_color_manual(values=MS_colors) +
-      facet_wrap (~ read_length, nrow=1) + 
-      scale_x_continuous (labels = c("L", "", "", "", "H")) +
-      labs (x="Quality", y="RPMM", color="") + 
-      ggtheme
-
-
-gg[["RPMMonCircRNA"]] <-
-   ggplot (bind_data %>% filter (myrpm > 0, feature=="circRNA" | feature == "CDS"), aes (x=as.factor(read_length), y=myrpm, color=feature)) +
-      geom_boxplot () +
-      scale_y_log10() +
-      scale_color_manual (values = MS_colors) +
-      labs (x="Read length (nts)", y="RPMM", color="") + 
-      facet_wrap (~feature, scales="free_y") +
-      ggtheme + theme (legend.position = "none")
+# gg[["RPMMvsQuality_legend"]] <-
+#    ggplot (bind_data %>% filter (myrpm > 0, feature %in% use_features), aes (x=qq, y=myrpm, color=feature)) +
+#       geom_line (size=1.2) +
+#       scale_y_log10(labels = dropZero) +
+#       scale_color_manual(values=MS_colors) +
+#       facet_wrap (~ read_length, nrow=1) + 
+#       scale_x_continuous (labels = c("L", "", "", "", "H")) +
+#       labs (x="Quality", y="RPMM", color="") + 
+#       ggtheme
 
 
 

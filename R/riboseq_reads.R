@@ -4,8 +4,7 @@ library (Biostrings)
 library (RCurl)
 library (data.table)  
 
-source ("R/colors.R") # overwrite ggtheme
-source ("R/riboseq_utils.R") 
+source ("R/themes") # overwrite ggtheme
 
 
 dfAll <- data.frame (fread ("zcat data/RiboSeq_ref.txt.gz"))
