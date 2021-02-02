@@ -7,7 +7,7 @@ source ("R/themes.R")
 
 MS_data <- list(
    "circRNA" = list (file="data/MS_circRNA.txt.gz", circ=T, grep="HUBNER"),
-   "COVID19" = list (file="data/MS_COVID19.txt.gz", circ=F, grep="SARS2"),
+   "SARS-CoV-2" = list (file="data/MS_COVID19.txt.gz", circ=F, grep="SARS2"),
    "Uniprot" = list (file="data/MS_Uniprot_subsample.txt.gz", circ=F, grep="HUMAN")
    
 )
@@ -16,6 +16,8 @@ MS_data <- list(
 MS_data <- map2 (MS_data, names (MS_data), function (msn, n) {
 
    dfMS <- data.frame (fread (paste ("zcat", msn$file)))
+   
+   print (nrow (dfMS))
 
    if (!"Matches" %in% colnames (dfMS) && "Unique..Proteins." %in% colnames (dfMS)) {
       dfMS$Matches = ifelse (dfMS$Unique..Proteins. == "yes", 1, 2)
@@ -86,11 +88,9 @@ MS_data <- map2 (MS_data, names (MS_data), function (msn, n) {
   
     df <- msn$dfFDR 
     
-    sum (df$signal_count)
-   
-   #write.table (msn$dfFDR, file = paste ("data/", n, ".txt", sep=""), sep="\t", col.names = T, row.names = F, quote = F)
-   
-   msn   
+    print (nrow (dfMS_u))
+    
+    msn   
    
    
 })
@@ -117,8 +117,8 @@ gg <- list()
 ggtheme <- ggtheme + theme (axis.text.x = element_text (size=14))
 ggtheme <- ggtheme + theme (axis.text.y = element_text (size=14))
 
-dfFDR.ALL$name <- factor (dfFDR.ALL$name, levels = c("Uniprot", "circRNA", "COVID19"))
-dfFDR.ALL$decoy_text2 <- factor (dfFDR.ALL$decoy_text2, levels = c("Uniprot", "circRNA", "COVID19", "noise"))
+dfFDR.ALL$name <- factor (dfFDR.ALL$name, levels = c("Uniprot", "circRNA", "SARS-CoV-2"))
+dfFDR.ALL$decoy_text2 <- factor (dfFDR.ALL$decoy_text2, levels = c("Uniprot", "circRNA", "SARS-CoV-2", "noise"))
 
 
 gg[['density']] <-
@@ -141,7 +141,7 @@ gg[['npeptides+decoys']] <-
    ggplot (dfFDR.sum) + 
    scale_y_log10() +
    geom_col (aes (x=decoy, y=n, fill=decoy_text2)) +
-   geom_text (aes (x=decoy, y=n,label = n), vjust=0) +
+   geom_text (aes (x=decoy, y=n,label = n), vjust=0, size=5) +
    scale_fill_manual (values = MS_colors) +
    #scale_y_continuous(dropZero) + 
    #facet_wrap (~name, nrow=1, scales="free_y") +
@@ -188,7 +188,7 @@ ggplot (dfFDR.ALL, aes (x=PEP, y=Q, color=decoy_text2)) +
  
 
 
-cairo_pdf("figures/MS.pdf", onefile=T)
+cairo_pdf("figures/MS.pdf", onefile=T, width=9)
    print (gg)
 dev.off()
 

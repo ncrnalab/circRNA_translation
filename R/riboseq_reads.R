@@ -4,8 +4,8 @@ library (Biostrings)
 library (RCurl)
 library (data.table)  
 
-source ("R/themes") # overwrite ggtheme
-
+source ("R/themes.R") #
+source ("R/riboseq_utils.R")
 
 dfAll <- data.frame (fread ("zcat data/RiboSeq_ref.txt.gz"))
 dfQual <- data.frame (fread ("data/RiboSeq_qual.txt"))
@@ -22,6 +22,10 @@ read_lengths <- list(
 )
 
 
+dfAll.sub <- dfAll %>%
+     group_by (srr, rc) %>%
+     summarize (mfdr = mean (fdr))
+
 dfAll.fdr <- dfAll %>%
      group_by (srr, rc) %>%
      summarize (mfdr = mean (fdr)) %>%
@@ -34,12 +38,11 @@ dfAll.fdr <- dfAll %>%
 highq <- structure (dfAll.fdr$highq, names=dfAll.fdr$rc)
 lowq <- structure (dfAll.fdr$lowq, names=dfAll.fdr$rc)
 
+
 dfAll$highq <- dfAll$fdr <= highq[as.character(dfAll$rc)]
 dfAll$lowq <- dfAll$fdr >= lowq[as.character(dfAll$rc)]
 
 refseq <- lapply (names (fa), function (x) list(ref = x)) %>% as.list()
-
-x <- refseq[[1]]
 
 refseq <- map (refseq, function (x) {
    
@@ -147,13 +150,12 @@ dfReads.cds <- map (refseq, function (x) {
 
 
 
+
 dfAll <- fread ('zcat data/RiboSeq_circ.txt.gz')
 
 dfAll$highq <- dfAll$fdr <= highq[as.character(dfAll$rc)]
 dfAll$lowq <- dfAll$fdr >= lowq[as.character(dfAll$rc)]
  
-
-rl <- read_lengths[[1]]
 
 circ <- map (read_lengths, function (rl) {
   

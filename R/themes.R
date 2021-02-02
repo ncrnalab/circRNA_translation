@@ -5,7 +5,9 @@ MS_colors <- c(
    "CDS" = "#2166AC",
    "circRNA" = "#B2182B",
    "COVID19" = "#9e46ab",
-   "sno/miRNA" = "#9e46ab"
+   "SARS-CoV-2" = "#9e46ab",
+   "sno/miRNA" = "#9e46ab",
+   "lncRNA" = "#217246"
 )
 
 
