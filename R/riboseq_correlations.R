@@ -4,12 +4,10 @@ library (tidyverse)
 library (usethis)
 
 
-#source ("~/projects/SFPQ/DESeq2_common.R")
 source ("R/riboseq_utils.R")
 source ("R/themes.R")
 
 riboseq_data <- data.frame (fread ("data/RiboSeq_featureCounts.txt"))
-
 
 
 # add circRNA data
@@ -124,8 +122,6 @@ gg[["RPMMvsQuality"]] <-
       scale_fill_manual(values=MS_colors) +
       scale_x_continuous (labels = c("L", "", "", "", "H")) +
       labs (x="Quality", y="RPMM", color="") + 
-      #scale_color_discrete(discrete = TRUE)+
-      #scale_fill_discrete(discrete = TRUE)  +
       ggtheme
 
 use_features <- c("CDS", "circRNA", "sno/miRNA", "lncRNA")
@@ -139,8 +135,6 @@ gg[["RPMMvsQuality_w_lncRNA"]] <-
       scale_fill_manual(values=MS_colors) +
       scale_x_continuous (labels = c("L", "", "", "", "H")) +
       labs (x="Quality", y="RPMM", color="") + 
-      #scale_color_discrete(discrete = TRUE)+
-      #scale_fill_discrete(discrete = TRUE)  +
       ggtheme
 
 
