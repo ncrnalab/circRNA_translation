@@ -9,7 +9,7 @@ Use **R/riboseq_reads.R** to plot the RiboSeq reads from high and low quality Ri
 
 **R/riboseq_correlation.R** plots the association between RiboSeq coverage and quality for mRNAs, lncRNAs, and circRNAs
 
-**R/MS.R** analyses and performs proper FDR control on Mass-Spec data from Doll et al using annotated proteins from UniProt with custom putative circRNA-derived peptides and the SARS-CoV2 proteome.
+**R/MS.R** plots Mass-spec analysis on data from [Doll et al](https://www.nature.com/articles/s41467-017-01747-2) using annotated proteins from UniProt with custom putative circRNA-derived peptides and the SARS-CoV2 proteome.
 
 
 ### License
